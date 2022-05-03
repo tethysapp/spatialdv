@@ -1,0 +1,132 @@
+{% extends "spatialdv/base.html" %}
+{% load tethys_gizmos %}
+       {% load static %}
+{% block header_buttons %}
+  <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
+    <a data-toggle="modal" data-target="#help-modal"><span class="glyphicon glyphicon-question-sign"></span></a>
+  </div>
+{% endblock %}
+
+{% block import_gizmos %}
+    {% import_gizmo_dependency map_view %}
+{% endblock %}
+
+
+{% block app_navigation_items %}
+<div id="nav-container">
+    <div id="workspace-section-header" class="nav-section-header workspace-content">
+        <h5>Discover Spatial Data</h5>
+    </div>
+    <div id="discover-section-header" class="nav-section-header discover-content">
+        <div id="discover-input-container">
+            <input id="discover-input" type="text" placeholder="Find Resources...">
+        </div>
+    </div>
+    <div id="discover-table-container" class="nav-table-container discover-content">
+        <div class="discover-loading-container">
+            <img class="main-loading-animation" src="{% static 'spatialdv/images/grid.svg' %}">
+        </div>
+        <table id="discover-table" class="display nav-table"></table>
+    </div>
+    <div id="discover-section-footer" class="nav-section-footer discover-content">
+    </div>
+</div>
+ 
+{% endblock %}
+
+{% block app_content %}
+
+{% gizmo map_view_options %}
+
+{% endblock %}
+
+{# Use the after_app_content block for modals #}
+{% block after_app_content %}
+  <div class="data-viewer-container">
+    <div class="data-viewer-header">
+      <div id="data-viewer-show" class="data-viewer-toggle hidden"  data-toggle="tooltip" data-placement="left" title="Expand">
+        <a><span class="glyphicon glyphicon-chevron-up"></span></a>
+      </div>
+      <div id="data-viewer-hide" class="data-viewer-toggle hidden"  data-toggle="tooltip" data-placement="left" title="Collapse">
+        <a><span class="glyphicon glyphicon-chevron-down"></span></a>
+      </div>
+      <div id="data-viewer-tabs" class="hidden">
+        <div id="resource-info" class="data-viewer-tab active-tab"> 
+          Resource Info
+        </div>
+      </div>
+    </div>
+    <div class="data-viewer-content">
+      <div id="resource-info-view" class="data-viewer-page">
+        <div class="data-view-loading-container">
+          <img class="main-loading-animation" src="{% static 'spatialdv/images/grid.svg' %}">
+        </div>
+        <div id="resource-metadata-container" class="resource-info-container">
+          <div id="resource-title" class="resource-info-label">Resource Title</div>
+          <div id="resource-metadata-content" class="resource-info-content">
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Creator:</div>
+              <div id="resource-creator" class="resource-metadata-value"></div>
+            </div>
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Date Created:</div>
+              <div id="resource-date-created" class="resource-metadata-value"></div>
+            </div>
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Last Updated:</div>
+              <div id="resource-last-updated" class="resource-metadata-value"></div>
+            </div>
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Resource Type:</div>
+              <div id="resource-type" class="resource-metadata-value"></div>
+            </div>
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Resource Link:</div>
+              <a id="resource-link" target="_blank" href="" class="resource-metadata-value"></a>
+            </div>
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Sharing Status:</div>
+              <div id="resource-sharing-status" class="resource-metadata-value"></div>
+            </div>
+            <div class="resource-metadata">
+              <div class="resource-metadata-label">Resource ID:</div>
+              <div id="resource-id" class="resource-metadata-value"></div>
+            </div>
+          </div>
+        </div>
+        <div id="resource-abstract-container" class="resource-info-container">
+          <div id="resource-abstract-label" class="resource-info-label">Resource Abstract</div>
+          <div id="resource-abstract-content" class="resource-info-content">
+            <div id="resource-abstract"></div>
+          </div>
+        </div>
+        <div id="resource-aggregation-container" class="resource-info-container">
+          <div id="resource-aggregations-label" class="resource-info-label">Resource Aggregations</div>
+          <div id="resource-aggregations-content" class="resource-info-content">
+            <div id="aggregation-no-data">No Layers Found</div>
+            <div id="resource-aggregation-list"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+
+
+{% block scripts %}
+ 
+  {{ block.super }}
+  <script>
+      // URLS
+      const URL_searchHydroshare = "{% url 'spatialdv:searchHydroshare' %}";
+      const URL_getMetadata = "{% url 'spatialdv:getResourceMetadata' %}";
+      const STATICURL_GridImg = "{% static 'spatialdv/images/grid.svg' %}";
+      const STATICURL_CompositeImg = "{% static 'spatialdv/images/composite.png' %}";
+      const STATICURL_GeographicFeatureResource = "{% static 'spatialdv/images/GeographicFeatureResource.png' %}";
+      const STATICURL_RasterResource = "{% static 'spatialdv/images/RasterResource.png' %}";
+      const STATICURL_Spinner = "{% static 'spatialdv/images/spinner.gif' %}";
+  </script>
+ 
+{% endblock %}
